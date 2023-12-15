@@ -289,7 +289,6 @@ class PreDataset(CIFAR10):
 # 导入训练集和测试集
 train_dataset = PreDataset(root='./train_dataset', train=True, download=True, transform=train_transform)
 test_dataset = torchvision.datasets.CIFAR10(root='./test_dataset', train=False, download=True, transform=test_transform)
-
 train_data = DataLoader(train_dataset, shuffle=True, batch_size=batch_size, drop_last=True)
 test_data = DataLoader(test_dataset, shuffle=True, batch_size=batch_size, drop_last=True)
 
@@ -297,11 +296,13 @@ test_data = DataLoader(test_dataset, shuffle=True, batch_size=batch_size, drop_l
 # 选择训练设备
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+
 # 创建神经网络
 model = resnet18('seq-cifar10')
 model = model.to(device)
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=lr, weight_decay=weight_decay)
+
 
 # #测试flops和参数量
 # dummy_input = torch.randn(1, 3, 32, 32)
@@ -334,7 +335,7 @@ for i in range(epoch):
         loss.backward()
         optimizer.step()
 
-        total_train_step += 1
+        # total_train_step += 1
 
     end_time = time.time()
     print("训练花费时间为{}".format(end_time - start_time))
